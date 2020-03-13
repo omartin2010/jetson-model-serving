@@ -15,7 +15,7 @@
                 "export DOCKER_ARGS=\"$DOCKER_ARGS -w $CWD\";",
                 "export CMD=\"python3 -m ptvsd --host 0.0.0.0 --port 5678 --wait app.py\";",
                 "export CMD_ARGS=\"--config_file config.json\";",
-                "export DOCKER_IMG=inferencing:latest;",
+                "export DOCKER_IMG=modelserving:latest;",
                 "echo args=$DOCKER_ARGS;",
                 "docker run $DOCKER_ARGS $DOCKER_IMG $CMD $CMD_ARGS;",
                 "echo 'Waiting 2 seconds to connect...';",
