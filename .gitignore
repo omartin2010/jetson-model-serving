@@ -2,3 +2,5 @@
 **/*.ipynb
 .vscode/.ropeproject/*
 __pycache__/*
+**/*.png
+**/*.jpg

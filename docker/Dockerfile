@@ -127,5 +127,11 @@ RUN cd models/research && \
 RUN rm /tmp/* -rf
 
 RUN pip3 install ptvsd flask
+EXPOSE 5000
 
-WORKDIR /root
+WORKDIR /app
+COPY *.py /app/
+COPY config.json /app
+COPY model /app/model
+COPY utils /app/utils
+CMD [ "/bin/sh", "-c", "python3 app.py --config_file config.json"]
