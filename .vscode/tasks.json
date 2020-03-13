@@ -1,0 +1,58 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "launchModelServingContainer",
+            "type": "shell",
+            "isBackground": false,
+            "command": [
+                "export CWD=\"/root/model-serving\";",
+                "export ROOT_CWD=\"/home/omartin/proj/model-serving\";",
+                "export DOCKER_ARGS=\"--privileged --rm -d --name lab-serving --network host\";",
+                "export DOCKER_ARGS=\"$DOCKER_ARGS -v $ROOT_CWD:$CWD\";",
+                "export DOCKER_ARGS=\"$DOCKER_ARGS -w $CWD\";",
+                "export CMD=\"python3 -m ptvsd --host 0.0.0.0 --port 5678 --wait app.py\";",
+                "export CMD_ARGS=\"--config_file config.json\";",
+                "export DOCKER_IMG=inferencing:latest;",
+                "echo args=$DOCKER_ARGS;",
+                "docker run $DOCKER_ARGS $DOCKER_IMG $CMD $CMD_ARGS;",
+                "echo 'Waiting 2 seconds to connect...';",
+                "sleep 2;",
+                "echo 'Ready to connect...';"
+            ],
+            "options": {
+                "shell": {
+                    "executable": "/bin/bash",
+                    "args": [
+                        "-c"
+                    ]
+                }
+            },
+            "problemMatcher": [
+                "$eslint-compact"
+            ]
+        },
+        {
+            "label": "stopModelServingContainer",
+            "type": "shell",
+            "isBackground": false,
+            "command": [
+                "docker stop lab-serving;",
+            ],
+            "options": {
+                "shell": {
+                    "executable": "/bin/bash",
+                    "args": [
+                        "-c"
+                    ]
+                }
+            },
+            "problemMatcher": [
+                "$eslint-compact"
+            ]
+        }
+
+    ]
+}

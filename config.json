@@ -1,0 +1,9 @@
+{
+    "models":{
+        "object_detector":{
+            "frozen_graph_path" : "model/frozen_inference_graph.pb",
+            "num_classes" : 2,
+            "label_map_path" : "model/label_map.pbtxt"
+        }
+    }
+}
