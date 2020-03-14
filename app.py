@@ -165,7 +165,9 @@ if __name__ == "__main__":
         load_models(robotJetsonConfiguration)
         log.warning(LOGGER_SCORING_STARTUP,
                     msg='Launching web app...')
-        app.run()
+        ip = robotJetsonConfiguration['app']['ip']
+        port=robotJetsonConfiguration['app']['port']
+        app.run(host=ip, port=port)
 
     except SystemExit:
         log.info(LOGGER_SCORING_STARTUP, 'Caught SystemExit...')

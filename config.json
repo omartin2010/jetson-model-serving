@@ -5,5 +5,9 @@
             "num_classes" : 2,
             "label_map_path" : "model/label_map.pbtxt"
         }
+    },
+    "app":{
+        "ip":"0.0.0.0",
+        "port":"5000"
     }
 }

@@ -1,5 +1,6 @@
 **/*.pyc
 **/*.ipynb
+**/*.swp
 .vscode/.ropeproject/*
 __pycache__/*
 **/*.png
