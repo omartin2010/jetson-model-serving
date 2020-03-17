@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 from flask import request
 import base64
 import logging
@@ -65,7 +65,9 @@ def score_model_object_detection(model_name):
                     predictions['classes'] = classes.tolist()
                     predictions['num_detections'] = num_detections.tolist()
                     predictions['inference_time'] = inference_time
-                    return json.dumps(predictions)
+                    return Response(
+                        json.dumps(predictions),
+                        mimetype='application/json')
         else:
             return (f'Model not implemented.')
     except Exception:
