@@ -4,8 +4,8 @@ import logging
 
 class RoboLogger(object):
     """
-    Implementation of a logger object for debugging independently all parts of the
-    robot
+    Implementation of a logger object for debugging independently all
+    parts of the robot
     CHANGE THAT TO A SINGLETON PATTERN  # TODO
     https://gist.github.com/pazdera/1098129
     """
@@ -25,7 +25,8 @@ class RoboLogger(object):
         defaultLevel : logging.INFO, ...
         '''
         if RoboLogger.__instance is not None:
-            raise Exception("The RoboLogger class is a singleton - can't create instances.")
+            raise Exception(f'The RoboLogger class is a singleton'
+                            f' - cannot create instances.')
         else:
             RoboLogger.__instance = self
             self.defaultLevel = defaultLevel
