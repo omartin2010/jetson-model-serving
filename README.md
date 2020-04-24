@@ -7,8 +7,7 @@ Details on this are on another project related project.
 ```
 docker run --restart unless-stopped --privileged -d \
     --name modelserving \
-    --memory 2g \
-    --memory-swap 3g \
+    --memory 1.5g \
     --network host \
-    modelserving:lowmem
+    modelserving:latest
 ```

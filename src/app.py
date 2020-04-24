@@ -12,7 +12,7 @@ import time
 import sys
 import signal
 import tensorflow as tf
-from utils import label_map_util
+# from utils import label_map_util
 from logger import RoboLogger
 from constant import LOGGER_SCORING_STARTUP, LOGGER_SCORING_SIGTERM, \
     LOGGER_SCORING_GRACEFUL_SHUTDOWN, LOGGER_SCORING_LOAD_MODELS, \
@@ -23,8 +23,6 @@ app = Flask(__name__)
 log = RoboLogger.getLogger()
 log.warning(LOGGER_SCORING_STARTUP,
             msg="Initial imports are completed.")
-category_index = None
-categories = None
 detection_graph = None
 tf_sess = None
 
@@ -57,8 +55,8 @@ def score_model_object_detection(model_name):
                         feed_dict={image_tensor: image_np_expanded})
                     end_time = time.time()
                     inference_time = end_time - start_time
-                    log.debug(LOGGER_SCORING_MODEL_RUN,
-                              msg=f'Inference time : {inference_time:.2f}s')
+                    log.warning(LOGGER_SCORING_MODEL_RUN,
+                              msg=f'Inference time : {inference_time:.4f}s')
                     predictions = {}
                     predictions['boxes'] = boxes.tolist()
                     predictions['scores'] = scores.tolist()
@@ -119,11 +117,9 @@ def graceful_shutdown():
 
 
 def load_models(conf: dict):
-    global category_index, categories, detection_graph, tf_sess
+    global detection_graph, tf_sess
     detection_graph = tf.Graph()
     frozen_graph_path = conf['models']['object_detector']['frozen_graph_path']
-    label_map_path = conf['models']['object_detector']['label_map_path']
-    num_classes = conf['models']['object_detector']['num_classes']
     with detection_graph.as_default():
         od_graph_def = tf.GraphDef()
         with tf.gfile.GFile(frozen_graph_path, 'rb') as fid:
@@ -134,26 +130,23 @@ def load_models(conf: dict):
             tf.import_graph_def(od_graph_def, name='')
     log.warning(LOGGER_SCORING_LOAD_MODELS,
                 msg='Model loaded in memory.')
-    # Loading label map
-    # Label maps map indices to category names, so that when our convolution
-    # network predicts `5`, we know that this corresponds to `airplane`.
-    # Here we use internal utility functions, but anything that returns a
-    # dictionary mapping integers to appropriate string labels would be fine
-    label_map = label_map_util.load_labelmap(label_map_path)
-    categories = label_map_util.convert_label_map_to_categories(
-        label_map, max_num_classes=num_classes, use_display_name=True)
-    category_index = label_map_util.create_category_index(categories)
-    gpu_option_dict = conf['tf_config']['GPUOptions']
-    per_process_gpu_memory_fraction = \
-        gpu_option_dict['per_process_gpu_memory_fraction']
-    log.warning(LOGGER_SCORING_LOAD_MODELS,
-                msg=f'Initializing TF with '
-                    f'{per_process_gpu_memory_fraction:.2f} '
-                    f'fraction of memory')
-    gpu_options = tf.GPUOptions(
-        per_process_gpu_memory_fraction=per_process_gpu_memory_fraction)
-    gpu_config = tf.ConfigProto(gpu_options=gpu_options)
-    tf_sess = tf.Session(graph=detection_graph, config=gpu_config)
+    # Building TF config
+    tf_config_dict = conf['tf_config']
+    if 'GPUOptions' in tf_config_dict:
+        gpu_option_dict = tf_config_dict['GPUOptions']
+        if 'per_process_gpu_memory_fraction' in gpu_option_dict:
+            per_process_gpu_memory_fraction = \
+                gpu_option_dict['per_process_gpu_memory_fraction']
+            log.warning(LOGGER_SCORING_LOAD_MODELS,
+                        msg=f'Initializing TF with '
+                            f'{per_process_gpu_memory_fraction:.2f} '
+                            f'fraction of memory')
+            gpu_options = tf.GPUOptions(
+                per_process_gpu_memory_fraction=per_process_gpu_memory_fraction)
+            tfconfig = tf.ConfigProto(gpu_options=gpu_options)
+    if 'device_count' in tf_config_dict:
+        tfconfig = tf.ConfigProto(device_count=tf_config_dict['device_count'])
+    tf_sess = tf.Session(graph=detection_graph, config=tfconfig)
 
 
 if __name__ == "__main__":
