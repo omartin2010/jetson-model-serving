@@ -143,7 +143,17 @@ def load_models(conf: dict):
     categories = label_map_util.convert_label_map_to_categories(
         label_map, max_num_classes=num_classes, use_display_name=True)
     category_index = label_map_util.create_category_index(categories)
-    tf_sess = tf.Session(graph=detection_graph)
+    gpu_option_dict = conf['tf_config']['GPUOptions']
+    per_process_gpu_memory_fraction = \
+        gpu_option_dict['per_process_gpu_memory_fraction']
+    log.warning(LOGGER_SCORING_LOAD_MODELS,
+                msg=f'Initializing TF with '
+                    f'{per_process_gpu_memory_fraction:.2f} '
+                    f'fraction of memory')
+    gpu_options = tf.GPUOptions(
+        per_process_gpu_memory_fraction=per_process_gpu_memory_fraction)
+    gpu_config = tf.ConfigProto(gpu_options=gpu_options)
+    tf_sess = tf.Session(graph=detection_graph, config=gpu_config)
 
 
 if __name__ == "__main__":

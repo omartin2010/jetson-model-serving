@@ -50,8 +50,8 @@ class RoboLogger(object):
         logger.setLevel(defaultLevel)
         ch = logging.StreamHandler()
         ch.setLevel(defaultLevel)
-        ch.setFormatter(logging.Formatter(fmt='%(asctime)s:%(name)s:%(threadName)s:%(levelname)s:%(message)s',
-                                          datefmt='%Y-%m-%d %H:%M:%S %Z'))
+        ch.setFormatter(logging.Formatter(fmt='%(asctime)s.%(msecs)03d:PID%(process)d:%(levelname)s:%(threadName)s:%(name)s:%(message)s',
+                                          datefmt='%Y-%m-%d %H:%M:%S'))
         logger.addHandler(ch)
         RoboLogger.__loggers.append(loggerName)
 
