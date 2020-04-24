@@ -1,7 +1,12 @@
 {
+    "tf_config":{
+        "GPUOptions":{
+            "per_process_gpu_memory_fraction":0.1
+        }
+    },
     "models":{
         "object_detector":{
-            "frozen_graph_path" : "model/frozen_inference_graph.pb",
+            "frozen_graph_path" : "model/frozen_inference_graph_ssdlite_mobilenet_v2_coco.pb",
             "num_classes" : 2,
             "label_map_path" : "model/label_map.pbtxt"
         }
