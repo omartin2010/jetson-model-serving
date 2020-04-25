@@ -11,7 +11,7 @@
                 "export SCRIPT=\"src/app.py\";",
                 "export CWD=\"/root/model-serving\";",
                 "export ROOT_CWD=\"/home/omartin/proj/model-serving\";",
-                "export DOCKER_ARGS=\"--privileged --rm -d --name lab-serving --network host\";",
+                "export DOCKER_ARGS=\"--privileged --rm -d --name modelserving-dev --network host\";",
                 "export DOCKER_ARGS=\"$DOCKER_ARGS -v $ROOT_CWD:$CWD\";",
                 "export DOCKER_ARGS=\"$DOCKER_ARGS -w $CWD\";",
                 "export CMD=\"python3 -m ptvsd --host 0.0.0.0 --port 5678 --wait $SCRIPT\";",
@@ -40,7 +40,7 @@
             "type": "shell",
             "isBackground": false,
             "command": [
-                "docker stop lab-serving;",
+                "docker stop modelserving-dev;",
             ],
             "options": {
                 "shell": {
