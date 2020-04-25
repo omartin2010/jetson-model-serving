@@ -1,7 +1,7 @@
 {
     "tf_config":{
-        "GPUOptions":{
-            "per_process_gpu_memory_fraction":0.1
+        "GPUOptions_backup":{
+            "per_process_gpu_memory_fraction":1
         },
         "device_count_backup":{
             "GPU": 0

@@ -132,6 +132,7 @@ def load_models(conf: dict):
                 msg='Model loaded in memory.')
     # Building TF config
     tf_config_dict = conf['tf_config']
+    tfconfig = None
     if 'GPUOptions' in tf_config_dict:
         gpu_option_dict = tf_config_dict['GPUOptions']
         if 'per_process_gpu_memory_fraction' in gpu_option_dict:

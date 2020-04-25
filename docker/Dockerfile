@@ -130,7 +130,7 @@ RUN pip3 install ptvsd flask
 EXPOSE 5000
 
 WORKDIR /app
-COPY src/utils /app/utils/
+#COPY src/utils /app/utils/
 COPY src/*.py /app/
 COPY config.json /app
 COPY model /app/model
