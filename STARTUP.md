@@ -5,5 +5,6 @@ docker run --restart unless-stopped --privileged -d \
     --name modelserving \
     --memory 1.5g \
     --network host \
-    modelserving:latest
+    --log-driver json-file --log-opt max-size=500k \
+    modelserving:lowmem
 ```
